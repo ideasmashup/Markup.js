@@ -28,7 +28,8 @@ describe("Markup core spec", function () {
         foods: { fruits: [ {"name":"apple"}, {"name":"orange"} ] },
         motto: "life is like a box of chocolates",
         obj: { truthy: true, falsy: false },
-        chars: [ ["a","b","c"], ["d","e","f"] ]
+        chars: [ ["a","b","c"], ["d","e","f"] ],
+        splits: "a,b,c and d"
     };
 
     beforeEach(function () {
@@ -367,6 +368,23 @@ describe("Markup core spec", function () {
         template = "brothers: {{brothers|sort|join> @ }}";
         result = Mark.up(template, context);
         expect(result).toEqual("brothers: Jack @ Jim @ Joe");
+    });
+
+    it("resolves string split into array", function () {
+        template = "{{splits|split}}";
+        result = Mark.up(template, context);
+        expect(result[0]).toEqual("a");
+        expect(result[1]).toEqual("b");
+        expect(result[2]).toEqual("c and d");
+
+        template = "{{splits|split> and }}";
+        result = Mark.up(template, context);
+        expect(result[0]).toEqual("a,b,c");
+        expect(result[1]).toEqual("d");
+
+        template = "{{splits|split|join> + }}";
+        result = Mark.up(template, context);
+        expect(result).toEqual("a + b + c and d");
     });
 
     it("resolves complex array", function () {
