@@ -290,7 +290,7 @@ Mark.up = function (template, context, options) {
         }
 
         // Evaluating an array, which might be a block expression.
-        else if (ctx instanceof Array) {
+        else if (ctx instanceof Array || child) {
             result = this._eval(ctx, filters, child);
         }
 
